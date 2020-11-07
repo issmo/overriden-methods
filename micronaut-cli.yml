@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: io.micronaut.data.issues
+testFramework: spock
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, data, data-jdbc, gradle, h2, http-client, java, java-application, jdbc-hikari, logback, netty-server, readme, shade, spock, yaml]

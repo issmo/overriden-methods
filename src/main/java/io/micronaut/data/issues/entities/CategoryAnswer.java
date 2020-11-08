@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-@MappedEntity("answers")
+@MappedEntity(value = "answers", escape = false)
 public class CategoryAnswer implements Serializable {
     @Id
     @AutoPopulated

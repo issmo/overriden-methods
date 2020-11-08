@@ -12,16 +12,16 @@ import javax.persistence.Id;
 import java.util.UUID;
 
 @Data
-@MappedEntity("votes")
+@MappedEntity(value = "votes", escape = false)
 public class AnswerVote {
     @Id
     @AutoPopulated
     UUID id;
 
-    @Relation(value = Relation.Kind.MANY_TO_ONE, cascade = Relation.Cascade.ALL)
-    @MappedProperty(value = "answer_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @Relation(value = Relation.Kind.MANY_TO_ONE, cascade = Relation.Cascade.ALL)
+    @MappedProperty(value = "answer_id")
     CategoryAnswer answer;
 
     int vote;

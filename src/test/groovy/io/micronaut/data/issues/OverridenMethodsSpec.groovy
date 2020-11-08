@@ -1,15 +1,16 @@
 package io.micronaut.data.issues
 
-import static java.util.stream.Collectors.toMap
 import io.micronaut.data.issues.entities.AnswerVote
 import io.micronaut.data.issues.entities.CategoryAnswer
 import io.micronaut.data.issues.repositories.AnswerVoteRepository
 import io.micronaut.data.issues.repositories.CategoryAnswerRepository
 import io.micronaut.runtime.EmbeddedApplication
-import io.micronaut.test.extensions.spock.annotation.MicronautTest
+import io.micronaut.test.annotation.MicronautTest
 import spock.lang.Specification
 
 import javax.inject.Inject
+
+import static java.util.stream.Collectors.toMap
 
 @MicronautTest
 class OverridenMethodsSpec extends Specification {

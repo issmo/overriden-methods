@@ -17,8 +17,7 @@ public class CategoryAnswer implements Serializable {
     @Id
     @AutoPopulated
     private UUID id;
-
-    private String answer;
+    private int answer;
 
     @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "answer")
     Set<AnswerVote> votes = new HashSet<>();

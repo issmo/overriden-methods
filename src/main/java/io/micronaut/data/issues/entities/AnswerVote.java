@@ -5,6 +5,8 @@ import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.data.annotation.Relation;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Id;
 import java.util.UUID;
@@ -18,6 +20,8 @@ public class AnswerVote {
 
     @Relation(value = Relation.Kind.MANY_TO_ONE, cascade = Relation.Cascade.ALL)
     @MappedProperty(value = "answer_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     CategoryAnswer answer;
 
     int vote;

@@ -1,5 +1,6 @@
 package io.micronaut.data.issues
 
+import static java.util.stream.Collectors.toMap
 import io.micronaut.data.issues.entities.AnswerVote
 import io.micronaut.data.issues.entities.CategoryAnswer
 import io.micronaut.data.issues.repositories.AnswerVoteRepository
@@ -28,11 +29,12 @@ class OverridenMethodsSpec extends Specification {
     }
 
     void "test issue  #669"() {
-        when:
+        Map<UUID, CategoryAnswer> answersInserted = new HashMap<>()
 
+        when:
         for (i in 1..4) {
             CategoryAnswer answer = new CategoryAnswer()
-            answer.setAnswer("answer " + i)
+            answer.setAnswer(i)
 
             answer = categoryAnswerrepository.save(answer)
 
@@ -41,32 +43,56 @@ class OverridenMethodsSpec extends Specification {
                 vote.setVote(j + 2*(i-1))
                 vote.setAnswer(answer)
 
-                answerVoteRepository.save(vote)
+                vote = answerVoteRepository.save(vote)
+                answer.getVotes().add(vote)
             }
+
+            answersInserted.put(answer.getId(), answer)
         }
 
+        CategoryAnswer answer = new CategoryAnswer()
+        answer.setAnswer(5)
+        answer = categoryAnswerrepository.save(answer)
+
+        AnswerVote vote = new AnswerVote()
+        vote.setVote(9)
+        vote.setAnswer(answer)
+
+        vote = answerVoteRepository.save(vote)
+        answer.getVotes().add(vote)
+
+        answersInserted.put(answer.getId(), answer)
+
+        answer = new CategoryAnswer()
+        answer.setAnswer(6)
+        answer = categoryAnswerrepository.save(answer)
+        for (j in 1..2) {
+            vote = new AnswerVote()
+            vote.setVote(j + 9)
+            vote.setAnswer(answer)
+
+            vote = answerVoteRepository.save(vote)
+            answer.getVotes().add(vote)
+        }
+        answersInserted.put(answer.getId(), answer)
+
         then:
-        categoryAnswerrepository.count() == 4
+        categoryAnswerrepository.count() == answersInserted.size()
 
         when:
         List<CategoryAnswer> answers = categoryAnswerrepository.findAllOrderById()
+        Map<UUID, CategoryAnswer> answersMap = answers.stream().collect(toMap(a -> a.getId() , a -> a));
 
         then:
-        answers.get(0).getVotes().size() == 2
-        answers.get(1).getVotes().size() == 2
-        answers.get(2).getVotes().size() == 2
-        answers.get(3).getVotes().size() == 2
+        answers.size() == answersInserted.size()
+        answersMap == answersInserted
 
         when:
         List<CategoryAnswer> answersFailure = categoryAnswerrepository.findAll()
+        Map<UUID, CategoryAnswer> answersFailureMap = answersFailure.stream().collect(toMap(a -> a.getId() , a -> a));
 
         then:
-        answersFailure.size() == 4
-
-        answersFailure.get(0).getVotes().size() == 2
-        answersFailure.get(1).getVotes().size() == 2
-        answersFailure.get(2).getVotes().size() == 2
-        answersFailure.get(3).getVotes().size() == 2
+        answersFailure.size() == answersInserted.size()
+        answersFailureMap == answersInserted
     }
-
 }
